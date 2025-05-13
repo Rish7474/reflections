@@ -1,0 +1,112 @@
+:root {
+    --bg: #f5f5f7;
+    --card-bg: #ffffff;
+    --primary: #007aff;
+    --text: #1c1c1e;
+    --subtle: #8e8e93;
+  }
+  
+  /* Global resets */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+  
+  .app-container { max-width: 480px; margin: 0 auto; padding: 16px; }
+  .app-header { position: relative; padding: 16px 0; display: flex; justify-content: center; align-items: center; }
+  .header-title { font-size: 24px; font-weight: 600; }
+  .header-menu, .back-btn { color: var(--subtle); font-size: 24px; background: none; border: none; cursor: pointer; transition: color 0.2s; }
+  .header-menu { position: absolute; right: 16px; display: flex; gap: 16px; }
+  .back-btn { position: absolute; left: 16px; }
+  .header-menu button:hover, .back-btn:hover { color: var(--primary); }
+  main { margin-top: 16px; }
+  
+  /* Survey card styling without timer */
+  .reflect-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 24px;
+    overflow: hidden;
+  }
+  .reflect-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 60vh;
+    justify-content: space-between;
+  }
+  .reflect-card h3 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+  .reflect-card label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .reflect-card label input { width: 22px; height: 22px; margin-right: 12px; accent-color: var(--primary); }
+  .reflect-card textarea {
+    width: 100%;
+    flex: 1;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+    resize: none;
+    margin-bottom: 24px;
+  }
+  .nav-hint {
+    text-align: center;
+    font-size: 14px;
+    color: var(--subtle);
+  }
+  
+  /* Responsive adjustments */
+  @media (min-width: 600px) {
+    .reflect-card { padding: 32px; }
+    .reflect-card h3 { font-size: 24px; margin-bottom: 32px; }
+    .reflect-card textarea { margin-bottom: 32px; font-size: 18px; }
+  }
+
+  .CategoryManager ul {
+    list-style: none;
+    margin-bottom: 12px;
+  }
+  
+  .CategoryManager li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .CategoryManager li span {
+    flex: 1;
+  }
+  
+  .input-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  .input-row input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .input-row button {
+    padding: 8px 16px;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 8px;
+  }
+  
