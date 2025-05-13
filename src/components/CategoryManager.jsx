@@ -4,51 +4,40 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 export default function CategoryManager({ categories, setCategories }) {
     const [newCat, setNewCat] = useState('');
 
-    // Add new category
     const add = () => {
-        const trimmed = newCat.trim();
-        if (trimmed) {
-            setCategories([...categories, trimmed]);
-            setNewCat('');
-        }
+        if (!newCat.trim()) return;
+        setCategories(prev => [...prev, newCat.trim()]);
+        setNewCat('');
     };
-
-    // Remove category
-    const remove = index => {
-        const updated = Array.from(categories);
-        updated.splice(index, 1);
-        setCategories(updated);
+    const remove = idx => {
+        setCategories(categories.filter((_, i) => i !== idx));
     };
-
-    // Handle drag end to reorder categories
     const onDragEnd = result => {
         if (!result.destination) return;
-        const reordered = Array.from(categories);
-        const [moved] = reordered.splice(result.source.index, 1);
-        reordered.splice(result.destination.index, 0, moved);
-        setCategories(reordered);
+        const items = Array.from(categories);
+        const [moved] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, moved);
+        setCategories(items);
     };
 
     return (
-        <div className="CategoryManager">
-            <h2>Manage Categories</h2>
+        <div className="CategoryManager card-container">
+            <h2 className="cm-title">Manage Categories</h2>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="categories">
                     {provided => (
-                        <ul
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                        >
-                            {categories.map((cat, idx) => (
-                                <Draggable key={cat + idx} draggableId={cat + idx} index={idx}>
-                                    {providedItem => (
+                        <ul className="cm-list" {...provided.droppableProps} ref={provided.innerRef}>
+                            {categories.map((cat, index) => (
+                                <Draggable key={cat + index} draggableId={cat + index} index={index}>
+                                    {prov => (
                                         <li
-                                            ref={providedItem.innerRef}
-                                            {...providedItem.draggableProps}
-                                            {...providedItem.dragHandleProps}
+                                            className="cm-item"
+                                            ref={prov.innerRef}
+                                            {...prov.draggableProps}
+                                            {...prov.dragHandleProps}
                                         >
-                                            <span>{cat}</span>
-                                            <button onClick={() => remove(idx)}>Remove</button>
+                                            <span className="cm-text">{cat}</span>
+                                            <button className="cm-remove" onClick={() => remove(index)}>×</button>
                                         </li>
                                     )}
                                 </Draggable>
@@ -58,13 +47,14 @@ export default function CategoryManager({ categories, setCategories }) {
                     )}
                 </Droppable>
             </DragDropContext>
-            <div className="input-row">
+            <div className="cm-input-row">
                 <input
+                    className="cm-input"
                     value={newCat}
                     onChange={e => setNewCat(e.target.value)}
                     placeholder="New category"
                 />
-                <button onClick={add}>Add</button>
+                <button className="cm-add-button" onClick={add}>Add</button>
             </div>
         </div>
     );

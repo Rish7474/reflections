@@ -12,18 +12,12 @@ export default function Reflect({ categories, dateKey }) {
     const current = categories[idx];
     const key = dateKey || fmt(new Date(), 'yyyy-MM-dd');
 
-    // load history for this date
     useEffect(() => {
         const stored = JSON.parse(localStorage.getItem('reflectHistory') || '[]');
         const entry = stored.find(d => d.date === key);
-        if (entry) {
-            setResponses(entry.responses);
-        } else {
-            setResponses({});
-        }
+        setResponses(entry ? entry.responses : {});
     }, [key]);
 
-    // load this category's values
     useEffect(() => {
         const resp = responses[current];
         if (resp) {
@@ -35,15 +29,11 @@ export default function Reflect({ categories, dateKey }) {
         }
     }, [idx, responses, current]);
 
-    // save responses back to history
     const record = useCallback(() => {
         const newResponses = { ...responses, [current]: { done: satisfied, note: notes } };
         setResponses(newResponses);
-
-        const stored = JSON.parse(localStorage.getItem('reflectHistory') || '[]');
-        const filtered = stored.filter(d => d.date !== key);
-        const updated = [...filtered, { date: key, responses: newResponses }];
-        localStorage.setItem('reflectHistory', JSON.stringify(updated));
+        const stored = JSON.parse(localStorage.getItem('reflectHistory') || '[]').filter(d => d.date !== key);
+        localStorage.setItem('reflectHistory', JSON.stringify([...stored, { date: key, responses: newResponses }]));
     }, [current, satisfied, notes, responses, key]);
 
     const navigate = useCallback(
@@ -54,11 +44,7 @@ export default function Reflect({ categories, dateKey }) {
         [categories.length, record]
     );
 
-    const handlers = useSwipeable({
-        onSwipedRight: () => navigate(1),
-        onSwipedLeft: () => navigate(-1),
-        trackMouse: true,
-    });
+    const handlers = useSwipeable({ onSwipedRight: () => navigate(1), onSwipedLeft: () => navigate(-1), trackMouse: true });
 
     const onClickNav = e => {
         if (e.target !== e.currentTarget) return;
@@ -69,28 +55,13 @@ export default function Reflect({ categories, dateKey }) {
     return (
         <div {...handlers} className="reflect-card" onClick={onClickNav}>
             <AnimatePresence exitBeforeEnter>
-                <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.25 }}
-                    className="reflect-content"
-                >
+                <motion.div key={idx} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }} className="reflect-content">
                     <h3>{current}</h3>
                     <label>
-                        <input
-                            type="checkbox"
-                            checked={satisfied}
-                            onChange={() => setSatisfied(s => !s)}
-                        />
+                        <input type="checkbox" checked={satisfied} onChange={() => setSatisfied(s => !s)} />
                         I feel satisfied
                     </label>
-                    <textarea
-                        placeholder="How do you feel? (optional)"
-                        value={notes}
-                        onChange={e => setNotes(e.target.value)}
-                    />
+                    <textarea placeholder="How do you feel today? (optional)" value={notes} onChange={e => setNotes(e.target.value)} />
                     <p className="nav-hint">Swipe or tap edges to navigate</p>
                 </motion.div>
             </AnimatePresence>

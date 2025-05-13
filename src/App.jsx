@@ -4,30 +4,29 @@ import { format } from 'date-fns';
 import CategoryManager from './components/CategoryManager';
 import Reflect from './components/Reflect';
 import HistoricalView from './components/HistoricalView';
-import './styles.css';
 
 export default function App() {
     const [categories, setCategories] = useState([
         'Fitness',
         'Career Development',
-        'Social Relationships',
+        'Hobbies',
     ]);
     const [mode, setMode] = useState('reflect');
     const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
-    // Handle calendar date clicks
     const handleDateSelect = date => {
         setSelectedDate(date);
         setMode('reflect');
     };
 
-    // Determine header title: show formatted date in Reflect mode
-    const headerTitle =
-        mode === 'reflect'
-            ? format(new Date(selectedDate), 'PPP')
-            : '';
+    var headerTitle = ''
+    if (mode === 'reflect')
+        headerTitle = format(new Date(selectedDate), 'PPP');
+    else if (mode === 'categories')
+        headerTitle = 'Settings';
+    else if (mode === 'history')
+        headerTitle = 'History';
 
-    // Render content based on mode
     const renderContent = () => {
         switch (mode) {
             case 'categories':
@@ -43,21 +42,17 @@ export default function App() {
         <div className="app-container">
             <header className="app-header">
                 {mode !== 'reflect' && (
-                    <button
-                        className="back-btn"
-                        aria-label="Back to Reflect"
-                        onClick={() => setMode('reflect')}
-                    >
+                    <button className="back-btn" onClick={() => setMode('reflect')}>
                         <FiArrowLeft />
                     </button>
                 )}
                 <h1 className="header-title">{headerTitle}</h1>
                 {mode === 'reflect' && (
                     <div className="header-menu">
-                        <button aria-label="Categories" onClick={() => setMode('categories')}>
+                        <button onClick={() => setMode('categories')}>
                             <FiSettings />
                         </button>
-                        <button aria-label="History" onClick={() => setMode('history')}>
+                        <button onClick={() => setMode('history')}>
                             <FiClock />
                         </button>
                     </div>

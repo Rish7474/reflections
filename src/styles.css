@@ -1,4 +1,9 @@
 :root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
   --bg: #f5f5f7;
   --card-bg: #ffffff;
   --primary: #007aff;
@@ -21,8 +26,9 @@ body {
 
 .app-container {
   max-width: 480px;
+  width: 100%;
   margin: 0 auto;
-  padding: 16px;
+  padding: var(--space-md);
 }
 
 .app-header {
@@ -30,47 +36,50 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 0;
+  padding: var(--space-md) 0;
 }
 
 .header-title {
   flex: 1;
   text-align: center;
-  font-size: 24px;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 600;
 }
 
 .back-btn {
   position: absolute;
-  left: 16px;
+  left: var(--space-md);
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: var(--subtle);
   cursor: pointer;
-  transition: color 0.2s;
+  padding: var(--space-xs);
+  border-radius: 50%;
+  transition: color 0.2s, background 0.2s;
 }
 
 .back-btn:hover {
   color: var(--primary);
+  background: rgba(0, 122, 255, 0.1);
 }
 
 .header-menu {
   position: absolute;
-  right: 16px;
+  right: var(--space-md);
   display: flex;
-  gap: 16px;
+  gap: var(--space-sm);
 }
 
 .header-menu button {
-  padding: 8px;
-  border-radius: 50%;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: var(--subtle);
   cursor: pointer;
-  transition: color 0.2s, background-color 0.2s;
+  padding: var(--space-xs);
+  border-radius: 50%;
+  transition: color 0.2s, background 0.2s;
 }
 
 .header-menu button:hover {
@@ -79,32 +88,30 @@ body {
 }
 
 main {
-  margin-top: 16px;
+  margin-top: var(--space-md);
 }
 
 /* Calendar styles */
 .calendar-grid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-xs);
 }
 
 .cal-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: var(--space-xs);
 }
 
 .cal-day {
   position: relative;
-  padding: 8px 4px;
+  padding: var(--space-sm) var(--space-xs);
   border-radius: 8px;
   min-height: 48px;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  background: var(--bg);
-  cursor: pointer;
 }
 
 .cal-day.none {
@@ -129,14 +136,14 @@ main {
 }
 
 .cal-day .date-label {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--text);
 }
 
 .history-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-md);
 }
 
 .history-header {
@@ -147,34 +154,39 @@ main {
 
 .history-header h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .history-header button {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 1.25rem;
   color: var(--subtle);
   cursor: pointer;
+  padding: var(--space-xs);
+  border-radius: 50%;
+  transition: color 0.2s, background 0.2s;
 }
 
 .history-header button:hover {
   color: var(--primary);
+  background: rgba(0, 122, 255, 0.1);
 }
 
 .legend {
   display: flex;
-  gap: 16px;
-  font-size: 14px;
+  gap: var(--space-md);
+  font-size: 0.875rem;
   align-items: center;
 }
 
 .legend .dot {
   display: inline-block;
-  width: 12px;
-  height: 12px;
+  width: 0.75rem;
+  height: 0.75rem;
   border-radius: 50%;
-  margin-right: 4px;
+  margin-right: var(--space-xs);
 }
 
 .legend .dot.none {
@@ -189,12 +201,96 @@ main {
   background: #00C853;
 }
 
-/* Reflect page spacing */
+/* CategoryManager page */
+.CategoryManager.card-container {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.cm-title {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+.cm-list {
+  list-style: none;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+}
+
+.cm-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.cm-text {
+  flex: 1;
+}
+
+.cm-remove {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--subtle);
+  cursor: pointer;
+  padding: var(--space-xs);
+  border-radius: 50%;
+  transition: color 0.2s;
+}
+
+.cm-remove:hover {
+  color: var(--primary);
+}
+
+.cm-input-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.cm-input {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.cm-add-button {
+  padding: var(--space-sm) var(--space-lg);
+  font-size: 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cm-add-button:hover {
+  background: #005bb5;
+}
+
+/* Reflect page */
 .reflect-card {
   background: var(--card-bg);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 24px;
+  padding: var(--space-lg);
   overflow: hidden;
 }
 
@@ -207,55 +303,54 @@ main {
 
 .reflect-card h3 {
   text-align: center;
-  font-size: 22px;
-  margin-bottom: 24px;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  margin-bottom: var(--space-lg);
 }
 
 .reflect-card label {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  margin-bottom: 16px;
+  font-size: 1rem;
+  margin-bottom: var(--space-md);
 }
 
 .reflect-card label input {
-  width: 22px;
-  height: 22px;
-  margin-right: 12px;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: var(--space-sm);
   accent-color: var(--primary);
 }
 
 .reflect-card textarea {
   width: 100%;
   flex: 1;
-  padding: 16px;
+  padding: var(--space-md);
   border: 1px solid #ddd;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
   resize: none;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-lg);
 }
 
 .nav-hint {
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--subtle);
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (min-width: 600px) {
   .reflect-card {
-    padding: 32px;
+    padding: var(--space-xl);
   }
 
   .reflect-card h3 {
-    font-size: 24px;
-    margin-bottom: 32px;
+    margin-bottom: var(--space-xl);
   }
 
   .reflect-card textarea {
-    margin-bottom: 32px;
-    font-size: 18px;
+    margin-bottom: var(--space-xl);
+    font-size: 1.125rem;
   }
 }
