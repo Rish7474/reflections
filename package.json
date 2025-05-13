@@ -2,7 +2,6 @@
     "name": "reflect-app",
     "version": "1.0.0",
     "private": true,
-    "homepage": "https://rish7474.github.io/reflect-app",
     "dependencies": {
         "framer-motion": "^7.6.8",
         "react": "^18.0.0",
