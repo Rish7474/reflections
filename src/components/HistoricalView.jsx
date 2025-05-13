@@ -1,24 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import CalendarView from './CalendarView';
+import { format } from 'date-fns';
 
-export default function HistoricalView() {
+export default function HistoricalView({ onDayClick }) {
     const [history, setHistory] = useState([]);
-    useEffect(() => setHistory(JSON.parse(localStorage.getItem('reflectHistory') || '[]')), []);
+    const [viewDate, setViewDate] = useState(new Date());
+
+    useEffect(() => {
+        const stored = JSON.parse(localStorage.getItem('reflectHistory') || '[]');
+        setHistory(stored);
+    }, []);
+
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+
+    const prevMonth = () => setViewDate(d => new Date(d.getFullYear(), d.getMonth() - 1, 1));
+    const nextMonth = () => setViewDate(d => new Date(d.getFullYear(), d.getMonth() + 1, 1));
+
     return (
-        <div>
-            <h2>History</h2>
-            {history.map((day, i) => (
-                <div key={i} className="history-day">
-                    <h4>{day.date}</h4>
-                    <ul>
-                        {Object.entries(day.responses).map(([cat, resp]) => (
-                            <li key={cat}>
-                                <strong>{cat}:</strong> {resp.done ? '✅' : '❌'}<br />
-                                {resp.note}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
+        <div className="history-container">
+            <div className="history-header">
+                <button onClick={prevMonth}>&lt;</button>
+                <h2>{format(viewDate, 'LLLL yyyy')}</h2>
+                <button onClick={nextMonth}>&gt;</button>
+            </div>
+            <CalendarView
+                year={year}
+                month={month}
+                history={history}
+                onDayClick={onDayClick}
+            />
+            <div className="legend">
+                <div><span className="dot none"></span> No Reflection</div>
+                <div><span className="dot done"></span> Completed</div>
+                <div><span className="dot all"></span> All Satisfied</div>
+            </div>
         </div>
     );
 }

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { FiSettings, FiClock, FiArrowLeft } from 'react-icons/fi';
+import { format } from 'date-fns';
 import CategoryManager from './components/CategoryManager';
 import Reflect from './components/Reflect';
 import HistoricalView from './components/HistoricalView';
+import './styles.css';
 
 export default function App() {
     const [categories, setCategories] = useState([
@@ -11,15 +13,29 @@ export default function App() {
         'Social Relationships',
     ]);
     const [mode, setMode] = useState('reflect');
+    const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
+    // Handle calendar date clicks
+    const handleDateSelect = date => {
+        setSelectedDate(date);
+        setMode('reflect');
+    };
+
+    // Determine header title: show formatted date in Reflect mode
+    const headerTitle =
+        mode === 'reflect'
+            ? format(new Date(selectedDate), 'PPP')
+            : '';
+
+    // Render content based on mode
     const renderContent = () => {
         switch (mode) {
             case 'categories':
                 return <CategoryManager categories={categories} setCategories={setCategories} />;
             case 'history':
-                return <HistoricalView />;
+                return <HistoricalView onDayClick={handleDateSelect} />;
             default:
-                return <Reflect categories={categories} />;
+                return <Reflect categories={categories} dateKey={selectedDate} />;
         }
     };
 
@@ -35,7 +51,7 @@ export default function App() {
                         <FiArrowLeft />
                     </button>
                 )}
-                <h1 className="header-title">Reflect</h1>
+                <h1 className="header-title">{headerTitle}</h1>
                 {mode === 'reflect' && (
                     <div className="header-menu">
                         <button aria-label="Categories" onClick={() => setMode('categories')}>

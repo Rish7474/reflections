@@ -1,15 +1,29 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { motion, AnimatePresence } from 'framer-motion';
+import { format as fmt } from 'date-fns';
 
-export default function Reflect({ categories }) {
+export default function Reflect({ categories, dateKey }) {
     const [idx, setIdx] = useState(0);
     const [responses, setResponses] = useState({});
     const [notes, setNotes] = useState('');
     const [satisfied, setSatisfied] = useState(false);
-    const current = categories[idx];
 
-    // Load saved entry on index change
+    const current = categories[idx];
+    const key = dateKey || fmt(new Date(), 'yyyy-MM-dd');
+
+    // load history for this date
+    useEffect(() => {
+        const stored = JSON.parse(localStorage.getItem('reflectHistory') || '[]');
+        const entry = stored.find(d => d.date === key);
+        if (entry) {
+            setResponses(entry.responses);
+        } else {
+            setResponses({});
+        }
+    }, [key]);
+
+    // load this category's values
     useEffect(() => {
         const resp = responses[current];
         if (resp) {
@@ -21,12 +35,16 @@ export default function Reflect({ categories }) {
         }
     }, [idx, responses, current]);
 
+    // save responses back to history
     const record = useCallback(() => {
-        setResponses(prev => ({
-            ...prev,
-            [current]: { done: satisfied, note: notes },
-        }));
-    }, [current, satisfied, notes]);
+        const newResponses = { ...responses, [current]: { done: satisfied, note: notes } };
+        setResponses(newResponses);
+
+        const stored = JSON.parse(localStorage.getItem('reflectHistory') || '[]');
+        const filtered = stored.filter(d => d.date !== key);
+        const updated = [...filtered, { date: key, responses: newResponses }];
+        localStorage.setItem('reflectHistory', JSON.stringify(updated));
+    }, [current, satisfied, notes, responses, key]);
 
     const navigate = useCallback(
         delta => {
@@ -49,11 +67,7 @@ export default function Reflect({ categories }) {
     };
 
     return (
-        <div
-            {...handlers}
-            className="reflect-card"
-            onClick={onClickNav}
-        >
+        <div {...handlers} className="reflect-card" onClick={onClickNav}>
             <AnimatePresence exitBeforeEnter>
                 <motion.div
                     key={idx}
